@@ -292,7 +292,7 @@ class ArrayBoom extends Phaser.Scene {
 
                     // End game if health reaches 0
                     if (this.myHealth < 1) {
-                        this.scene.start("start");
+                        this.scene.start("end");
                     }
                 }
 
