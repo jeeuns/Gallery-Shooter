@@ -15,6 +15,9 @@ class endScreen extends Phaser.Scene {
         this.load.image("enemy1", "ship_0000.png");
         this.load.image("hit", "tile_0012.png");
 
+        this.load.image("spaceempty","keyboard_space_outline.png");
+        this.load.image("spacefill","keyboard_space.png");
+
         // Load the Kenny Rocket Square bitmap font
         // This was converted from TrueType format into Phaser bitmap
         // format using the BMFont tool.
@@ -37,21 +40,39 @@ class endScreen extends Phaser.Scene {
 
         document.getElementById('description').innerHTML = '<h2>GAME OVER</h2>'
 
-        my.text.start = this.add.bitmapText(game.config.width/5, game.config.height/2, "rocketSquare", "PLAY AGAIN? [SPACE]");
-        my.text.title = this.add.bitmapText(game.config.width/10, game.config.height/3, "rocketSquare", "GAME OVER");
+        my.text.start = this.add.bitmapText(game.config.width/10, game.config.height/2, "rocketSquare", "PLAY AGAIN?");
+        my.text.start.setScale(1.5);
+        my.text.title = this.add.bitmapText(game.config.width/10, game.config.height/3, "rocketSquare", "GAME OVER.");
         my.text.title.setScale(1.5);
 
         this.nextScene = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+
+        // my.sprite.space1 = this.add.sprite(game.config.width/2, game.config.height/2, "spaceempty");
+        // my.sprite.space1.setScale(2);
+        // my.sprite.space2 = this.add.sprite(game.config.width/2, game.config.height/2, "spacefill");
+        // my.sprite.space2.setScale(2);
+        // my.sprite.space2.visible = false;
+        
+        this.anims.create({
+            key: "space",
+            frames: [
+                { key: "spaceempty" },
+                { key: "spacefill" },
+            ],
+            frameRate: 5,
+            repeat: -1,
+            hideOnComplete: false,
+        });
+
+        this.space = this.add.sprite(game.config.width-250, (game.config.height/2)+30, "spaceempty").setScale(3).play("space");
 
     }
 
     update(){
         let my = this.my;
 
-
-
         if (Phaser.Input.Keyboard.JustDown(this.nextScene)) {
-                this.scene.start("arrayBoom");
+                this.scene.start("start");
                 this.sound.play("select", {
                     volume: 1   // Can adjust volume using this, goes from 0 to 1
                 });

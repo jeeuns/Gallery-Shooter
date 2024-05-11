@@ -59,10 +59,38 @@ class ArrayBoom extends Phaser.Scene {
         this.load.audio("select", "switch_004.ogg");
         this.load.audio("enemyhit", "footstep_carpet_000.ogg");
         this.load.audio("playerhit", "footstep_grass_001.ogg");
+
+        //KEYBOARD IMAGE
+        this.load.image("spaceempty","keyboard_space_outline.png");
+        this.load.image("spacefill","keyboard_space.png");
+
+        this.load.image("aempty","keyboard_a_outline.png");
+        this.load.image("afill","keyboard_a.png");
+
+        this.load.image("dempty","keyboard_d_outline.png");
+        this.load.image("dfill","keyboard_d.png");
+
     }
 
     create() {
         let my = this.my;
+
+        //KEYBOARD SPRITES
+        my.sprite.space1 = this.add.sprite(game.config.width-125, 500, "spaceempty");
+        my.sprite.space1.setScale(2);
+        my.sprite.space2 = this.add.sprite(game.config.width-125, 500, "spacefill");
+        my.sprite.space2.setScale(2);
+        my.sprite.space2.visible = false;
+
+        my.sprite.aempty = this.add.sprite(game.config.width-200, 500, "aempty");
+        my.sprite.afill = this.add.sprite(game.config.width-200, 500, "afill");
+        my.sprite.afill.visible = false;
+
+        my.sprite.dempty = this.add.sprite(game.config.width-50, 500, "dempty");
+        my.sprite.dfill = this.add.sprite(game.config.width-50, 500, "dfill");
+        my.sprite.dfill.visible = false;
+
+
 
         my.sprite.player = this.add.sprite(game.config.width/2, game.config.height - 40, "player");
         my.sprite.player.setScale(2);
@@ -108,8 +136,6 @@ class ArrayBoom extends Phaser.Scene {
         // TEXT ON SCREEN
         my.text.score = this.add.bitmapText(580, 0, "rocketSquare", "Score " + this.myScore);
         my.text.health = this.add.bitmapText(20, 550, "rocketSquare", "Health: " + this.myHealth);
-        my.text.restart = this.add.bitmapText(game.config.width/5, game.config.height/2, "rocketSquare", "Press [R] to Play Again");
-        my.text.restart.visible = false;
 
         // Put title on screen
         my.text.title = this.add.bitmapText(20, 0, "rocketSquare", "SPACE SHOOTER");
@@ -191,22 +217,34 @@ class ArrayBoom extends Phaser.Scene {
         // Moving left
         if (this.left.isDown) {
             // Check to make sure the sprite can actually move left
+            my.sprite.afill.visible = true;
+            my.sprite.aempty.visible = false;
             if (my.sprite.player.x > (my.sprite.player.displayWidth/2)) {
                 my.sprite.player.x -= this.playerSpeed;
-            }
+            } 
+        } else {
+            my.sprite.afill.visible = false;
+            my.sprite.aempty.visible = true;
         }
 
         // Moving right
         if (this.right.isDown) {
+            my.sprite.dfill.visible = true;
+            my.sprite.dempty.visible = false;
             // Check to make sure the sprite can actually move right
             if (my.sprite.player.x < (game.config.width - (my.sprite.player.displayWidth/2))) {
                 my.sprite.player.x += this.playerSpeed;
             }
+        } else {
+            my.sprite.dfill.visible = false;
+            my.sprite.dempty.visible = true;
         }
 
         this.bulletCooldownCounter--;
 
         if (this.space.isDown) {
+            my.sprite.space1.visible = false;
+            my.sprite.space2.visible = true;
             if (this.bulletCooldownCounter < 0) {
                 // Get the first inactive bullet, and make it active
                 let bullet = my.sprite.bulletGroup.getFirstDead();
@@ -219,6 +257,9 @@ class ArrayBoom extends Phaser.Scene {
                     this.bulletCooldownCounter = this.bulletCooldown;
                 }
             }
+        } else {
+            my.sprite.space1.visible = true;
+            my.sprite.space2.visible = false;
         }
 
         my.sprite.bullet = my.sprite.bullet.filter((bullet) => bullet.y > -(bullet.displayHeight/2));
@@ -293,6 +334,7 @@ class ArrayBoom extends Phaser.Scene {
                     // End game if health reaches 0
                     if (this.myHealth < 1) {
                         this.scene.start("end");
+                        this.myHealth = 5;
                     }
                 }
 

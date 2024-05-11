@@ -15,6 +15,16 @@ class titleScreen extends Phaser.Scene {
         this.load.image("enemy1", "ship_0000.png");
         this.load.image("hit", "tile_0012.png");
 
+        //space
+        this.load.image("spaceempty","keyboard_space_outline.png");
+        this.load.image("spacefill","keyboard_space.png");
+
+        this.load.image("aempty","keyboard_a_outline.png");
+        this.load.image("afill","keyboard_a.png");
+
+        this.load.image("dempty","keyboard_d_outline.png");
+        this.load.image("dfill","keyboard_d.png");
+
         // Load the Kenny Rocket Square bitmap font
         // This was converted from TrueType format into Phaser bitmap
         // format using the BMFont tool.
@@ -40,6 +50,13 @@ class titleScreen extends Phaser.Scene {
         my.sprite.player = this.add.sprite(game.config.width/2, game.config.height - 100, "player");
         my.sprite.player.setScale(2);
 
+        //keyboard images
+        my.sprite.space1 = this.add.sprite(game.config.width/2, game.config.height - 200, "spaceempty");
+        my.sprite.space1.setScale(2);
+        my.sprite.space2 = this.add.sprite(game.config.width/2, game.config.height - 200, "spacefill");
+        my.sprite.space2.setScale(2);
+        my.sprite.space2.visible = false;
+
         my.text.start = this.add.bitmapText(game.config.width/5, game.config.height/2, "rocketSquare", "Press [SPACE] to Play");
         my.text.title = this.add.bitmapText(game.config.width/10, game.config.height/3, "rocketSquare", "SPACE SHOOTER");
         my.text.title.setScale(2);
@@ -54,6 +71,8 @@ class titleScreen extends Phaser.Scene {
 
 
         if (Phaser.Input.Keyboard.JustDown(this.nextScene)) {
+            my.sprite.space2.visible = true;
+            my.sprite.space1.visible = false;
                 this.scene.start("arrayBoom");
                 this.sound.play("select", {
                     volume: 1   // Can adjust volume using this, goes from 0 to 1
